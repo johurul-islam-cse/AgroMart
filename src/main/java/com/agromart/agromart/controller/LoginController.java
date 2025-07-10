@@ -1,36 +1,44 @@
 package com.agromart.agromart.controller;
 
-import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller; // Update to Controller
-import org.springframework.web.bind.annotation.*;
-import com.agromart.agromart.model.User;
-import com.agromart.agromart.service.UserService;
-
-
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Controller // Change to Controller
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.agromart.agromart.model.User;
+import com.agromart.agromart.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
 public class LoginController {
 
     @Autowired
     private UserService userService;
 
-    // Serve the login page
+    @GetMapping("/")
+    public String home(HttpSession session) {
+        if (session.getAttribute("user") != null) {
+            return "dashboard";
+        }
+        return "redirect:/login";
+    }
+
     @GetMapping("/login")
     public String showLoginPage(HttpSession session) {
         if (session.getAttribute("user") != null) {
-            return "redirect:/dashboard"; // Redirect to dashboard if session is active
+            return "redirect:/dashboard";
         }
-        return "login"; // Return the name of the login.html view
+        return "login";
     }
 
-    // Login endpoint
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> loginData, HttpSession session) {
         String email = loginData.get("email");
@@ -58,11 +66,10 @@ public class LoginController {
         }
     }
 
-    // Logout endpoint
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:login"; // Redirect to login page after logout
+        return "redirect:/login";
     }
 
     @GetMapping("/dashboard")
