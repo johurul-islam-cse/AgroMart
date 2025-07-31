@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Business Dashboard | AgroMart</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      height: 100vh;
+    }
+    .product-grid {
+      flex: 3;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      overflow-y: auto;
+    }
+    .product-card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .product-card img {
+      max-width: 100%;
+      border-radius: 8px;
+      height: 150px;
+      object-fit: cover;
+    }
+    .product-card h3 {
+      margin: 10px 0 5px;
+    }
+    .product-card p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    .product-card button {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #b88e2f;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+    .cart-sidebar {
+      flex: 1;
+      border-left: 1px solid #ddd;
+      background: #fff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      max-width: 350px;
+    }
+    .cart-items {
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .cart-items ul {
+      list-style: none;
+      padding: 0;
+    }
+    .cart-items li {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      align-items: center;
+    }
+    .cart-items li input[type=number] {
+      width: 50px;
+      margin-left: 10px;
+    }
+    .cart-items li button {
+      margin-left: 10px;
+      background: #ec1010;
+      border: none;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .cart-summary {
+      border-top: 1px solid #ccc;
+      padding-top: 15px;
+    }
+    .cart-summary p {
+      font-weight: bold;
+      font-size: 18px;
+      margin: 0;
+    }
+    .cart-summary button {
+      margin-top: 10px;
+      width: 100%;
+      padding: 12px;
+      background-color: #ec1010;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="product-grid" id="productList">
+    <!-- Products will be loaded here -->
+  </div>
+
+  <div class="cart-sidebar">
+    <div class="cart-items">
+      <h3>Your Cart</h3>
+      <ul id="cartList"></ul>
+    </div>
+    <div class="cart-summary">
+      <p>Total: ৳<span id="totalPrice">0.00</span></p>
+      <button onclick="placeOrder()">Place Order</button>
+    </div>
+  </div>
+
+  <script>
+    let cart = [];
+
+    function loadProducts() {
+      const data = localStorage.getItem('agro_products');
+      return data ? JSON.parse(data) : [];
+    }
+
+    function saveCart() {
+      localStorage.setItem('agro_cart_business', JSON.stringify(cart));
+    }
+
+    function loadCart() {
+      const data = localStorage.getItem('agro_cart_business');
+      cart = data ? JSON.parse(data) : [];
+    }
+
+    function displayProducts() {
+      const products = loadProducts();
+      const container = document.getElementById('productList');
+      container.innerHTML = '';
+
+      products.forEach(p => {
+        const card = document.createElement('div');
+        card.classList.add('product-card');
+
+        card.innerHTML = `
+          <img src="${p.photo}" alt="${p.name}" />
+          <h3>${p.name}</h3>
+          <p>৳${p.priceBusiness.toFixed(2)} /kg</p>
+          <p>Min Order: ${p.minOrderBusiness} kg</p>
+          <button onclick="addToCart(${p.id})">Add to Cart</button>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function addToCart(productId) {
+      const products = loadProducts();
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+
+      const existing = cart.find(item => item.productId === productId);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ productId, qty: 1 });
+      }
+      saveCart();
+      updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+      const cartList = document.getElementById('cartList');
+      const products = loadProducts();
+      cartList.innerHTML = '';
+
+      let total = 0;
+
+      cart.forEach(item => {
+        const product = products.find(p => p.id === item.productId);
+        if (!product) return;
+
+        const itemTotal = product.priceBusiness * item.qty;
+        total += itemTotal;
+
+        const li = document.createElement('li');
+        li.innerHTML = `
+          ${product.name} - ৳${product.priceBusiness.toFixed(2)} x 
+          <input type="number" value="${item.qty}" min="${product.minOrderBusiness}" onchange="changeQty(${item.productId}, this.value)" />
+          = ৳${itemTotal.toFixed(2)}
+          <button onclick="removeFromCart(${item.productId})">Remove</button>
+        `;
+        cartList.appendChild(li);
+      });
+
+      document.getElementById('totalPrice').innerText = total.toFixed(2);
+    }
+
+    function changeQty(productId, newQty) {
+      newQty = parseInt(newQty);
+      if (isNaN(newQty) || newQty < 1) return;
+
+      const item = cart.find(i => i.productId === productId);
+      if (!item) return;
+
+      item.qty = newQty;
+      saveCart();
+      updateCartDisplay();
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(i => i.productId !== productId);
+      saveCart();
+      updateCartDisplay();
+    }
+
+    function placeOrder() {
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+      alert('Order placed! This is a demo, implement backend logic.');
+      cart = [];
+      saveCart();
+      updateCartDisplay();
+    }
+
+    // Initialize page
+    loadCart();
+    displayProducts();
+    updateCartDisplay();
+  </script>
+</body>
+</html>

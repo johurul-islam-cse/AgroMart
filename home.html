@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgroMart | Home</title>
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css}"
+    />
+    <style>
+      body {
+        font-family: Poppins, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav_bar {
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #fff;
+        padding: 0 50px;
+      }
+
+      .nav_logo {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo_img {
+        height: 80px;
+        width: 80px;
+      }
+
+      .logo_text {
+        font-weight: 800;
+        font-size: 30px;
+        color: #ec1010;
+        margin-left: 8px;
+      }
+
+      .logo_text_small {
+        font-size: 12px;
+        color: #161616;
+      }
+
+      .nav_ul {
+        display: flex;
+        list-style: none;
+      }
+
+      .nav_ul a {
+        text-decoration: none;
+        color: black;
+        padding: 0 20px;
+      }
+
+      .nav_text.active {
+        font-size: 25px;
+        font-weight: 900;
+      }
+
+      .nav_search_icon a {
+        margin: 0 10px;
+        font-size: 18px;
+        color: black;
+      }
+
+      .hero_section {
+        text-align: center;
+        padding: 100px 20px;
+        background: linear-gradient(to right, #fdfaf5, #f5f5f5);
+      }
+
+      .hero_section h1 {
+        font-size: 48px;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .hero_section p {
+        font-size: 20px;
+        color: #666;
+        margin-bottom: 40px;
+      }
+
+      .hero_buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .hero_buttons select,
+      .hero_buttons a {
+        padding: 12px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .hero_buttons select {
+        background-color: #fff;
+        border: 1px solid #ccc;
+      }
+
+      .login-btn {
+        background-color: #b88e2f;
+        color: white;
+      }
+
+      .register-btn {
+        background-color: #ec1010;
+        color: white;
+      }
+
+      .login-btn:hover {
+        background-color: #8f641d;
+      }
+
+      .register-btn:hover {
+        background-color: #a30c0c;
+      }
+
+      .footer {
+        background-color: #fff;
+        border-top: 1px solid #bebebe;
+        padding: 100px 50px 20px;
+      }
+
+      .footer-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 30px;
+      }
+
+      .footer-column {
+        flex: 1 1 200px;
+      }
+
+      .footer-column h4 {
+        font-weight: 500;
+        font-size: 18px;
+        color: #9f9f9f;
+        margin-bottom: 10px;
+      }
+
+      .footer-column ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .footer-column ul li {
+        margin: 8px 0;
+      }
+
+      .footer-column ul li a {
+        font-size: 16px;
+        text-decoration: none;
+        color: #000;
+        transition: color 0.3s;
+      }
+
+      .footer-column ul li a:hover {
+        color: #999;
+      }
+
+      .newsletter-form {
+        display: flex;
+        border-bottom: 1px solid #000;
+        padding-bottom: 5px;
+        max-width: 250px;
+      }
+
+      .newsletter-form input {
+        border: none;
+        outline: none;
+        font-size: 12px;
+        flex-grow: 1;
+      }
+
+      .newsletter-form button {
+        background: none;
+        border: none;
+        color: #000;
+        font-size: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        padding-left: 10px;
+      }
+
+      .footer-bottom {
+        font-size: 12px;
+        color: #333;
+        margin-top: 20px;
+        border-top: 1px solid #bebebe;
+        padding-top: 10px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="nav_bar">
+      <div class="nav_logo">
+        <img
+          th:src="@{https://ik.imagekit.io/3fbss0rod/Logo_1.png?updatedAt=1752178818889}"
+          alt="Nav_Logo"
+          class="logo_img"
+        />
+        <div class="logo_text">
+          AgroMart<br />
+          <p class="logo_text_small">Farmer Happiness!</p>
+        </div>
+      </div>
+      <ul class="nav_ul">
+        <li class="nav_text active"><a th:href="@{/}">Home</a></li>
+        <li class="nav_text"><a th:href="@{/register}">About</a></li>
+        <li class="nav_text"><a th:href="@{/delivery-dasborard}">Contact</a></li>
+        <li class="nav_text"><a th:href="@{/blog}">Blog</a></li>
+      </ul>
+      <div class="nav_search_icon">
+        <a href="#"><i class="fa-solid fa-user"></i></a>
+        <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+        <a href="#"><i class="fa-regular fa-heart"></i></a>
+        <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero_section">
+      <h1>Hi! I am AgroMart</h1>
+      <p>Your one-stop platform for agriculture needs</p>
+      <div class="hero_buttons">
+        <a th:href="@{/login}" class="login-btn">Login</a>
+        <a th:href="@{/register}" class="register-btn">Register</a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-column">
+          <h2 class="logo">AgroMart</h2>
+          <address>
+            Daffodil Smart City,<br />
+            Ashulia, Savar<br />
+          </address>
+        </div>
+        <div class="footer-column">
+          <h4>Links</h4>
+          <ul>
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/about}">About</a></li>
+            <li><a th:href="@{/contact}">Contact</a></li>
+            <li><a th:href="@{/blog}">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Help</h4>
+          <ul>
+            <li><a href="#">Payment Options</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Privacy Policies</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Ask Something</h4>
+          <form class="newsletter-form">
+            <input type="text" placeholder="Enter your query" />
+            <button>Send</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>2025 khanItFarm. All rights reserved</p>
+      </div>
+    </footer>
+  </body>
+</html>

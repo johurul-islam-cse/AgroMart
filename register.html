@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register | AgroMart</title>
+  <style>
+    body {
+      font-family: Poppins, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 500px;
+      background: #fff;
+      margin-top: 60px;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      color: #555;
+    }
+    select, input[type="text"], input[type="file"], input[type="tel"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    .info {
+      margin: 20px 0;
+      background: #f0f0f0;
+      padding: 10px;
+      border-left: 4px solid #b88e2f;
+      font-size: 14px;
+    }
+    .google-btn {
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      background: #db4437;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .submit-btn {
+      width: 100%;
+      background: #b88e2f;
+      color: white;
+      border: none;
+      padding: 12px;
+      margin-top: 20px;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Register as a Role</h2>
+    <form id="register-form" enctype="multipart/form-data">
+      <label for="role">Select Role</label>
+      <select id="role" name="role" required>
+        <option value="">-- Select Role --</option>
+        <option value="farmer">🌾 Farmer</option>
+        <option value="customer">🛒 General Customer</option>
+        <option value="business">💼 Business Customer</option>
+        <option value="delivery">🚚 Delivery Agent</option>
+      </select>
+
+      <div id="infoBox" class="info hidden"></div>
+
+      <!-- Business Fields -->
+      <div id="businessFields" class="hidden">
+        <label for="shopName">Shop Name</label>
+        <input type="text" id="shopName" name="shopName" />
+
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" />
+
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" />
+
+        <label for="tradeLicense">Trade License</label>
+        <input type="file" id="tradeLicense" name="tradeLicense" accept="image/*,.pdf" />
+
+        <label for="nid">NID (Owner)</label>
+        <input type="file" id="nid" name="nid" accept="image/*,.pdf" />
+
+        <label for="photo">Owner Photo</label>
+        <input type="file" id="photo" name="photo" accept="image/*" />
+      </div>
+
+      <!-- Delivery Fields -->
+      <div id="deliveryFields" class="hidden">
+        <label for="companyName">Company Name</label>
+        <input type="text" id="companyName" name="companyName" />
+
+        <label for="contractDoc">Contract Document</label>
+        <input type="file" id="contractDoc" name="contractDoc" accept="image/*,.pdf" />
+      </div>
+
+      <button id="googleBtn" type="button" class="google-btn hidden">Sign up with Google</button>
+
+      <button id="submitBtn" type="submit" class="submit-btn hidden">Submit Registration</button>
+    </form>
+  </div>
+
+  <script>
+    const roleSelect = document.getElementById('role');
+    const infoBox = document.getElementById('infoBox');
+    const googleBtn = document.getElementById('googleBtn');
+    const submitBtn = document.getElementById('submitBtn');
+
+    const businessFields = document.getElementById('businessFields');
+    const deliveryFields = document.getElementById('deliveryFields');
+
+    roleSelect.addEventListener('change', () => {
+      const role = roleSelect.value;
+
+      // Hide everything initially
+      infoBox.classList.add('hidden');
+      googleBtn.classList.add('hidden');
+      submitBtn.classList.add('hidden');
+      businessFields.classList.add('hidden');
+      deliveryFields.classList.add('hidden');
+
+      if (role === 'farmer') {
+        infoBox.textContent = "Farmers do not register here. Your account will be provided by the admin.";
+        infoBox.classList.remove('hidden');
+      } else if (role === 'customer') {
+        infoBox.textContent = "Please sign up with your Google account. You can edit your details later.";
+        infoBox.classList.remove('hidden');
+        googleBtn.classList.remove('hidden');
+      } else if (role === 'business') {
+        infoBox.textContent = "Fill out the form and upload your documents. Admin will verify and send credentials.";
+        infoBox.classList.remove('hidden');
+        businessFields.classList.remove('hidden');
+        submitBtn.classList.remove('hidden');
+      } else if (role === 'delivery') {
+        infoBox.textContent = "Upload your company and contract documents. Admin will verify and send credentials.";
+        infoBox.classList.remove('hidden');
+        deliveryFields.classList.remove('hidden');
+        submitBtn.classList.remove('hidden');
+      }
+    });
+
+    googleBtn.addEventListener('click', () => {
+      // Redirect to Google OAuth or your Google login handler
+      alert('Redirecting to Google sign-in...');
+      // Example:
+      // window.location.href = '/auth/google';
+    });
+  </script>
+</body>
+</html>
